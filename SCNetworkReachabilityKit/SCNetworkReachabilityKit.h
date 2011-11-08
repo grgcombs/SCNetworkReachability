@@ -22,5 +22,5 @@
  *
  ******************************************************************************/
 
-#import <SCNetworkReachabilityKit/SCNetworkReachability.h>
-#import <SCNetworkReachabilityKit/SCNetworkReachabilityFlags.h>
+#import "SCNetworkReachability.h"
+#import "SCNetworkReachabilityFlags.h"

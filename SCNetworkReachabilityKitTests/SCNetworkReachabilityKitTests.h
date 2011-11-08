@@ -23,7 +23,7 @@
 //------------------------------------------------------------------------------
 
 #import <SenTestingKit/SenTestingKit.h>
-#import <SCNetworkReachabilityKit/SCNetworkReachabilityKit.h>
+#import "SCNetworkReachabilityKit.h"
 
 @interface SCNetworkReachabilityKitTests : SenTestCase
 {
