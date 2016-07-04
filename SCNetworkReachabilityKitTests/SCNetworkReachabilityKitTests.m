@@ -42,40 +42,41 @@
 
 - (void)testStringFromNetworkReachabilityFlags
 {
-	STAssertEqualObjects([(NSString *)SCNetworkReachabilityCFStringCreateFromFlags(0x00000000) autorelease], @"---------", nil);
+    XCTAssertEqualObjects([(NSString *)SCNetworkReachabilityCFStringCreateFromFlags(0x00000000) autorelease], @"---------");
 #if TARGET_OS_IPHONE
-	STAssertEqualObjects([(NSString *)SCNetworkReachabilityCFStringCreateFromFlags(0xffffffff) autorelease], @"WdlDiCcRt", nil);
+    XCTAssertEqualObjects([(NSString *)SCNetworkReachabilityCFStringCreateFromFlags(0xffffffff) autorelease], @"WdlDiCcRt");
 #else
-	STAssertEqualObjects([(NSString *)SCNetworkReachabilityCFStringCreateFromFlags(0xffffffff) autorelease], @"-dlDiCcRt", nil);
+    STAssertEqualObjects([(NSString *)SCNetworkReachabilityCFStringCreateFromFlags(0xffffffff) autorelease], @"-dlDiCcRt", nil);
 #endif
-	STAssertEqualObjects([(NSString *)SCNetworkReachabilityCFStringCreateFromFlags(kSCNetworkReachabilityFlagsReachable) autorelease], @"-------R-", nil);
+    XCTAssertEqualObjects([(NSString *)SCNetworkReachabilityCFStringCreateFromFlags(kSCNetworkReachabilityFlagsReachable) autorelease], @"-------R-");
 }
 
 - (void)testLinkLocalReachability
 {
-	STAssertNotNil(linkLocalReachability, nil);
+	XCTAssertNotNil(linkLocalReachability);
 	SCNetworkReachabilityFlags flags;
-	STAssertTrue([linkLocalReachability getFlags:&flags], nil);
-	STAssertEqualObjects([(NSString *)SCNetworkReachabilityCFStringCreateFromFlags(flags) autorelease], @"-d-----R-", nil);
+	XCTAssertTrue([linkLocalReachability getFlags:&flags]);
+	XCTAssertEqualObjects([(NSString *)SCNetworkReachabilityCFStringCreateFromFlags(flags) autorelease], @"-d-----R-");
 }
 
 - (void)testLinkLocalReachable
 {
-	STAssertEquals([linkLocalReachability networkReachableForFlags:kSCNetworkReachabilityFlagsReachable | kSCNetworkReachabilityFlagsIsDirect], (SCNetworkReachable)kSCNetworkReachableViaWiFi, nil);
+	XCTAssertEqual([linkLocalReachability networkReachableForFlags:kSCNetworkReachabilityFlagsReachable | kSCNetworkReachabilityFlagsIsDirect], (SCNetworkReachable)kSCNetworkReachableViaWiFi);
 }
 
 - (void)testLinkLocalNotReachable
 {
-	STAssertEquals([linkLocalReachability networkReachableForFlags:kSCNetworkReachabilityFlagsReachable], (SCNetworkReachable)kSCNetworkNotReachable, nil);
-	STAssertEquals([linkLocalReachability networkReachableForFlags:kSCNetworkReachabilityFlagsIsDirect], (SCNetworkReachable)kSCNetworkNotReachable, nil);
+	XCTAssertEqual([linkLocalReachability networkReachableForFlags:kSCNetworkReachabilityFlagsReachable], (SCNetworkReachable)kSCNetworkNotReachable);
+	XCTAssertEqual([linkLocalReachability networkReachableForFlags:kSCNetworkReachabilityFlagsIsDirect], (SCNetworkReachable)kSCNetworkNotReachable);
 }
 
 - (void)testInternetReachability
 {
-	STAssertNotNil(internetReachability, nil);
+	XCTAssertNotNil(internetReachability);
 	SCNetworkReachabilityFlags flags;
-	STAssertTrue([internetReachability getFlags:&flags], nil);
-	STAssertEqualObjects([(NSString *)SCNetworkReachabilityCFStringCreateFromFlags(flags) autorelease], @"--l----R-", nil);
+	XCTAssertTrue([internetReachability getFlags:&flags]);
+    NSString *flagsAsString = [(NSString *)SCNetworkReachabilityCFStringCreateFromFlags(flags) autorelease];
+    XCTAssertTrue([flagsAsString hasSuffix:@"R-"]);
 }
 
 - (void)testInternetReachableViaWiFi
@@ -93,7 +94,7 @@
 	};
 	for (NSUInteger i = 0; i < sizeof(reachableViaWiFiFlags)/sizeof(reachableViaWiFiFlags[0]); i++)
 	{
-		STAssertEquals([internetReachability networkReachableForFlags:reachableViaWiFiFlags[i]], (SCNetworkReachable)kSCNetworkReachableViaWiFi, @"Internet not reachable via wi-fi (%@)", [(NSString *)SCNetworkReachabilityCFStringCreateFromFlags(reachableViaWiFiFlags[i]) autorelease]);
+		XCTAssertEqual([internetReachability networkReachableForFlags:reachableViaWiFiFlags[i]], (SCNetworkReachable)kSCNetworkReachableViaWiFi, @"Internet not reachable via wi-fi (%@)", [(NSString *)SCNetworkReachabilityCFStringCreateFromFlags(reachableViaWiFiFlags[i]) autorelease]);
 	}
 }
 
@@ -117,7 +118,7 @@
 	};
 	for (NSUInteger i = 0; i < sizeof(notReachableFlags)/sizeof(notReachableFlags[0]); i++)
 	{
-		STAssertEquals([internetReachability networkReachableForFlags:notReachableFlags[i]], (SCNetworkReachable)kSCNetworkNotReachable, @"Internet reachable via wi-fi (%@)", [(NSString *)SCNetworkReachabilityCFStringCreateFromFlags(notReachableFlags[i]) autorelease]);
+		XCTAssertEqual([internetReachability networkReachableForFlags:notReachableFlags[i]], (SCNetworkReachable)kSCNetworkNotReachable, @"Internet reachable via wi-fi (%@)", [(NSString *)SCNetworkReachabilityCFStringCreateFromFlags(notReachableFlags[i]) autorelease]);
 	}
 }
 
